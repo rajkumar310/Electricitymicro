@@ -1,0 +1,120 @@
+package com.capg.controller;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import java.util.ArrayList;
+import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+import com.capg.entity.Payment;
+import com.capg.exceptionHandler.IdNotFoundException;
+import com.capg.service.PaymentService;
+
+public class PaymentControllerTest {
+
+    @InjectMocks
+    private paymentController paymentController;
+
+    @Mock
+    private PaymentService paymentService;
+
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
+    @Test
+    public void testAddPayment() {
+        Payment payment = new Payment(); // Create a Payment object for testing
+        payment.setAmount(100.0); // Set any required attributes
+
+        when(paymentService.addPayment(any(Payment.class))).thenReturn(payment);
+
+        ResponseEntity<Payment> response = paymentController.addPayment(payment);
+
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
+        assertEquals(payment, response.getBody());
+
+        verify(paymentService, times(1)).addPayment(any(Payment.class));
+    }
+
+    @Test
+    public void testGetAllPayments() {
+        List<Payment> payments = new ArrayList<>();
+        // Add some Payment objects to the list
+
+        when(paymentService.getAllPayments()).thenReturn(payments);
+
+        ResponseEntity<List<Payment>> response = paymentController.getAllPayments();
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(payments, response.getBody());
+
+        verify(paymentService, times(1)).getAllPayments();
+    }
+
+    @Test
+    public void testGetPaymentById() {
+        int paymentId = 1; // Replace with a valid payment ID
+        Payment payment = new Payment(); // Create a Payment object for testing
+
+        when(paymentService.getById(paymentId)).thenReturn(payment);
+
+        ResponseEntity<Payment> response = paymentController.getPaymentById(paymentId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(payment, response.getBody());
+
+        verify(paymentService, times(1)).getById(paymentId);
+    }
+
+    @Test
+    public void testDeleteById() {
+        int paymentId = 1; // Replace with a valid payment ID
+
+        ResponseEntity<String> response = paymentController.deleteById(paymentId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Id no: " + paymentId + " is deleted successfully...", response.getBody());
+
+        verify(paymentService, times(1)).deleteById(paymentId);
+    }
+
+    @Test
+    public void testEditPaymentById() {
+        int paymentId = 1; // Replace with a valid payment ID
+        Payment updatedPayment = new Payment(); // Create an updated Payment object for testing
+
+        when(paymentService.editPaymentById(paymentId, updatedPayment)).thenReturn(updatedPayment);
+
+        ResponseEntity<Payment> response = paymentController.editPaymentById(paymentId, updatedPayment);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(updatedPayment, response.getBody());
+
+        verify(paymentService, times(1)).editPaymentById(paymentId, updatedPayment);
+    }
+    
+    
+    @Test
+    public void testEditPaymentByIdWithInvalidId() {
+        int paymentId = 999; // Replace with an invalid payment ID
+        Payment updatedPayment = new Payment(); // Create an updated Payment object for testing
+
+        when(paymentService.editPaymentById(paymentId, updatedPayment))
+                .thenThrow(new IdNotFoundException("Payment not found"));
+
+        ResponseEntity<Payment> response = paymentController.editPaymentById(paymentId, updatedPayment);
+
+        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+
+        verify(paymentService, times(1)).editPaymentById(paymentId, updatedPayment);
+    }
+}

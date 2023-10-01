@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy element &apos;Bill.java&apos; to &apos;Payment-Service/src/main/java/com.capg.vo&apos;&#x0D;&#x0A;- Original project: &apos;Bill-Service&apos;&#x0D;&#x0A;- Destination element: &apos;Payment-Service/src/main/java/com.capg.vo&apos;&#x0D;&#x0A;- Original element: &apos;com.capg.entity.Bill.java&apos;" description="Copy compilation unit" destination="=Payment-Service/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.capg.vo" element1="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.capg.entity{Bill.java" files="0" flags="589830" folders="0" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyResources" stamp="1691150427184" units="1" version="1.0"/>
+</session>
